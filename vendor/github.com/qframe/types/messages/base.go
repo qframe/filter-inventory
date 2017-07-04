@@ -1,13 +1,14 @@
-package qtypes
+package qtypes_messages
 
 import (
 	"time"
 	"crypto/sha1"
 	"fmt"
+	"github.com/qnib/qframe-types"
 )
 
 const (
-	version = "0.5.11"
+	version = "0.0.0"
 )
 
 type Base struct {
@@ -17,7 +18,8 @@ type Base struct {
 	SourceID		int
 	SourcePath		[]string
 	SourceSuccess 	bool
-	Data 			map[string]string // Additional Data
+	Tags 			map[string]string // Additional KV
+	Data			interface{}
 }
 
 func NewBase(src string) Base {
@@ -32,10 +34,36 @@ func NewTimedBase(src string, t time.Time) Base {
 		SourceID: 0,
 		SourcePath: []string{src},
 		SourceSuccess: true,
-		Data: map[string]string{},
+		Tags: map[string]string{},
 	}
 	return b
 }
+
+func NewBaseFromBase(src string, b Base) Base {
+	return Base {
+		BaseVersion: b.BaseVersion,
+		ID: b.ID,
+		Time: b.Time,
+		SourceID: b.SourceID,
+		SourcePath: append(b.SourcePath, src),
+		SourceSuccess: b.SourceSuccess,
+		Tags: b.Tags,
+		Data: b.Data,
+	}
+}
+
+func NewBaseFromOldBase(src string, b qtypes.Base) Base {
+	return Base {
+		BaseVersion: b.BaseVersion,
+		ID: b.ID,
+		Time: b.Time,
+		SourceID: b.SourceID,
+		SourcePath: append(b.SourcePath, src),
+		SourceSuccess: b.SourceSuccess,
+		Tags: b.Data,
+	}
+}
+
 
 // GenDefaultID uses "<source>-<time.UnixNano()>" and does a sha1 hash.
 func (b *Base) GenDefaultID() string {
@@ -45,19 +73,6 @@ func (b *Base) GenDefaultID() string {
 
 func (b *Base) GetMessageDigest() string {
 	return b.ID[:13]
-}
-
-func (base *Base) NewExtMetric(src, name string, metricTyp string, val float64, dimensions map[string]string, t time.Time, buffered bool) Metric {
-	m := Metric{
-		Base: 		*base,
-		Name:       sanitizeString(name),
-		MetricType: metricTyp,
-		Value:      val,
-		Dimensions: dimensions,
-		Buffered:   buffered,
-	}
-	m.AppendSource(src)
-	return m
 }
 
 func (b *Base) GetTimeRFC() string {
