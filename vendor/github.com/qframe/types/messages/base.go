@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	version = "0.0.0"
+	version = "0.1.0"
 )
 
 type Base struct {
@@ -114,4 +114,31 @@ func Sha1HashString(s string) string {
 	h.Write([]byte(s))
 	bs := h.Sum(nil)
 	return fmt.Sprintf("%x", bs)
+}
+
+
+func (b *Base) StopProcessing(p qtypes.Plugin, allowEmptyInput bool) bool {
+	if p.MyID == b.SourceID {
+		p.Log("debug", "Msg came from the same GID")
+		return true
+	}
+	// TODO: Most likely invoked often, so check if performant enough
+	inputs := p.GetInputs()
+	if ! allowEmptyInput && len(inputs) == 0 {
+		format := "Plugin '%s' does not allow empty imputs, please set '%s.%s.inputs'"
+		msg := fmt.Sprintf(format, p.Name, p.Typ, p.Name)
+		p.Log("error", msg)
+		return true
+	}
+	srcSuccess := p.CfgBoolOr("source-success", true)
+	if ! b.InputsMatch(inputs) {
+		p.Log("debug", fmt.Sprintf("InputsMatch(%v) != %s", inputs, b.GetLastSource()))
+		return true
+	}
+	if b.SourceSuccess != srcSuccess {
+		msg := fmt.Sprintf("qm.SourceSuccess (%v) != (%v) srcSuccess", b.SourceSuccess, srcSuccess)
+		p.Log("debug", msg)
+		return true
+	}
+	return false
 }

@@ -419,14 +419,14 @@
 		{
 			"checksumSHA1": "ZncKo6EkTDtWe626y0pidAV7lZE=",
 			"path": "github.com/qframe/types/inventory",
-			"revision": "4f5ba12d19c84b9999b6bd6d1f56ac8aa4d59189",
-			"revisionTime": "2017-07-04T08:33:38Z"
+			"revision": "6d42f742812ea47200a89db146298bc020f4ae31",
+			"revisionTime": "2017-07-04T14:14:55Z"
 		},
 		{
-			"checksumSHA1": "AIzvDSIQ/5lTyrqHa6LdgusJ4t8=",
+			"checksumSHA1": "gj7LcRYr+aE8nyKLP6ELFKuaCtc=",
 			"path": "github.com/qframe/types/messages",
-			"revision": "4f5ba12d19c84b9999b6bd6d1f56ac8aa4d59189",
-			"revisionTime": "2017-07-04T08:33:38Z"
+			"revision": "6d42f742812ea47200a89db146298bc020f4ae31",
+			"revisionTime": "2017-07-04T14:14:55Z"
 		},
 		{
 			"checksumSHA1": "LIwCZUvkDokhBUefE2wjH4m6PVU=",
